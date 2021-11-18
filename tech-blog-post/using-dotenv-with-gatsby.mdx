@@ -1,0 +1,36 @@
+---
+name: using the dotenv package with Gatsby.js
+date: '2019-09-14'
+title: 'Keeping API keys secret in Gatsby'
+description: 'using the dotenv package with Gatsby.js to keep your keys secret'
+metaDescription: 'using the dotenv package with Gatsby.js to keep your keys secret'
+categories:
+  - Gatsby
+  - Security
+---
+
+I am not a security expert and make no promises that this will hack proof your app. I do know you should [**NEVER** commit secret keys to github](https://hackernoon.com/how-to-use-environment-variables-keep-your-secret-keys-safe-secure-8b1a7877d69c)
+
+1. Open `.gitignore` and ignore `*.env`. You should probably ignore this in a [global .gitignore file](astucc.io/how-to-create-a-global-gitgnore-file)
+
+# secret files
+
+2. Create a .env file in your apps main directory
+   `code .env`
+
+3. Add as many secrets to your new .env file as you need. Something like:
+   `SECRET_KEY=sk_T2BDZFh2BE57DZFhGn0qlXGhiQK`
+   `ANOTHER_KEY=srahateinrshnthnrasht374678'
+
+4. Add to gatsby-node.js
+
+```JavaScript
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+})
+
+...
+// import keys something like
+`secretKey: process.env.SECRET_KEY,`
+`anotherKey: process.env.ANOTHER_KEY,`
+```

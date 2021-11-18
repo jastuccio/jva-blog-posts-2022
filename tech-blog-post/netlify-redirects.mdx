@@ -1,0 +1,35 @@
+---
+date: '2019-09-08'
+title: 'Redirecting non-www to www on Netlify with Gatsby'
+description: 'How I handle redirects on my Gatsby website hosted on Netlify '
+metaDescription: 'Gatsby Netlify redirects'
+categories:
+  - Gatsby
+  - Building This Website
+  - Node
+  - Netlify
+---
+
+I want to redirect all non-www traffic to www on my website.
+
+You may be able to do this with [Netlify Lambda functions?](https://www.netlify.com/docs/functions/) I decided to create the redirect in gatsby-node.js because I felt more comfortable creating it there.
+
+> if you’re running a build command or site generator, the \_redirects file should end up in the folder you’re deploying ~ [Netlify redirect docs](https://www.netlify.com/docs/redirects/)
+
+```js
+// include node fs module
+var fs = require('fs');
+
+// writeFile function with filename, content and callback function
+fs.writeFile('_redirects', 'Learn Node FS module', function(err) {
+  if (err) throw err;
+  console.log('File is created successfully.');
+});
+```
+
+resources:
+https://www.tutorialkart.com/nodejs/create-file-in-nodejs-using-node-fs-module/
+
+https://play.netlify.com/redirects
+
+https://www.netlify.com/docs/redirects/

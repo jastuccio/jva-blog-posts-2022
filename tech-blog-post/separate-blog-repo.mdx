@@ -1,0 +1,114 @@
+---
+date: '2019-09-09'
+title: 'Using a separate repo for my blog posts'
+description: 'How to use a separate repository for content with Gatsby and Netlify '
+metaDescription: 'Multilple repository Gatsby Sites'
+categories:
+  - Gatsby
+  - Building This Website
+  - Node
+---
+
+My blog posts are pulled from a separate repo at build time. This separates content commits from structure and styling commits. It also makes my content more portable if I ever want to change from Gatsby to a different platform. Here is how I did it:
+
+1. install [download-git-repo](https://www.npmjs.com/package/download-git-repo)
+   `yarn add download-git-repo`
+
+2. Open gatsby-node.js and add
+
+```js
+const download = require('download-git-repo');
+
+exports.onPreBootstrap = () =>
+  new Promise((res, rej) => {
+    download(
+      '<your github name>/<your content repo>',
+      '<location in your gatsby site>',
+      err => {
+        if (err) rej(err);
+        else res();
+      }
+    );
+  });
+```
+
+3. Use a query to build posts from the content. Eventually I will write a post on building this query. For now here is an excerpt from the fantastic [gatsby-starter-minimal-blog](https://www.gatsbyjs.org/starters/LekoArts/gatsby-starter-minimal-blog/)
+
+```js
+
+// imports and styling code omitted
+...
+
+const IndexPage = ({
+  data: {
+    allMdx: { nodes: posts },
+  },
+}) => (
+  <Layout>
+    <Wrapper>
+      <Hero>
+        <h1>Hi.</h1>
+        <p>I&apos;m Joe Astuccio,</p>
+        <p>
+          Web Developer, Sailor, Stargazer, Hockey Player, and all around fun guy... but my absolute favorite thing is
+          being a dad.
+        </p>
+        <Link to="/contact">
+          <Button big>
+            <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1764 11q33 24 27 64l-256 1536q-5 29-32 45-14 8-31 8-11 0-24-5l-453-185-242 295q-18 23-49 23-13 0-22-4-19-7-30.5-23.5t-11.5-36.5v-349l864-1059-1069 925-395-162q-37-14-40-55-2-40 32-59l1664-960q15-9 32-9 20 0 36 11z" />
+            </svg>
+            Contact
+          </Button>
+        </Link>
+      </Hero>
+      <Content>
+        <SectionTitle>Latest stories</SectionTitle>
+        {posts.map(post => (
+          <Article
+            title={post.frontmatter.title}
+            date={post.frontmatter.date}
+            excerpt={post.excerpt}
+            timeToRead={post.timeToRead}
+            slug={post.fields.slug}
+            categories={post.frontmatter.categories}
+            key={post.fields.slug}
+          />
+        ))}
+      </Content>
+    </Wrapper>
+  </Layout>
+)
+
+export default IndexPage
+
+IndexPage.propTypes = {
+  data: PropTypes.shape({
+    allMdx: PropTypes.shape({
+      nodes: PropTypes.array.isRequired,
+    }),
+  }).isRequired,
+}
+
+export const IndexQuery = graphql`
+  query IndexQuery {
+    allMdx(sort: { fields: [frontmatter___date], order: DESC }) {
+      nodes {
+        fields {
+          slug
+        }
+        frontmatter {
+          title
+          date(formatString: "MM/DD/YYYY")
+          categories
+        }
+        excerpt(pruneLength: 200)
+        timeToRead
+      }
+    }
+  }
+`
+```
+
+4. Trigger a Netlify Deploy when the content repo is updated
+   \*I will update this post when I learn how to make Netlify deploy when the second repo (content) is updated.

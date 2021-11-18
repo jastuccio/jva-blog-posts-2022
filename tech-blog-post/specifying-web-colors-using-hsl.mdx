@@ -1,0 +1,45 @@
+---
+date: '2019-04-22'
+title: 'Specifying Web Colors Using HSL'
+description: 'I use HSL instead of hex color values when building a website'
+metaDescription: 'HSL color values'
+categories:
+  - Design
+  - CSS
+---
+
+## HSL - Hue, Saturation, and Lightness
+
+[Specifying colors for the web with HSL](https://caniuse.com/#feat=css3-colors) has good modern browser support (of course it doesn't work with IE 8 or earlier 🙄)
+
+### Hue
+
+the color. It takes a value between `0deg` and `360deg`.
+
+![](https://res.cloudinary.com/jastuccio/image/upload/v1555869262/blog/specifying-web-colors-using-hsl/hsl_color_wheel.png)
+
+### Saturation
+
+How much color. `0%` (gray) to `100%` (full saturation).
+
+### Lightness
+
+`0%`(black) to `100%`(white) 50% is the mid point and the most colorful.
+
+example: `color: hsl(280deg, 0%, 50%);`
+
+If you need transparency use HSLa `hsla(280deg, 0%, 50%, 0.8)`
+
+_At `0%` saturation, hue has no effect. See the video below_
+
+<iframe
+  width='560'
+  height='315'
+  src='https://res.cloudinary.com/jastuccio/video/upload/v1555872598/blog/specifying-web-colors-using-hsl/0saturation.mp4'
+  frameborder='0'
+  allowfullscreen
+></iframe>
+
+---
+
+[Human Friendly Colours using HSL](https://medium.com/samsung-internet-dev/human-friendly-colours-using-hsl-4944bcdb6e27) on Medium also has some interesting tips
